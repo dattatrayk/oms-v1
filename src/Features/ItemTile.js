@@ -4,14 +4,16 @@ const ItemTile = ({ item, onAddToCart }) => {
   const [quantity, setQuantity] = useState(0);
 
   const handleIncrement = () => {
-    setQuantity(quantity + 1);
-    onAddToCart(item, quantity + 1); // Call parent function with updated quantity
+    const newQuantity = quantity + 1;
+    setQuantity(newQuantity);
+    onAddToCart(item, newQuantity); // Call parent function with updated quantity
   };
 
   const handleDecrement = () => {
     if (quantity > 0) {
-      setQuantity(quantity - 1);
-      onAddToCart(item, quantity - 1); // Call parent function with updated quantity
+      const newQuantity = quantity - 1;
+      setQuantity(newQuantity);
+      onAddToCart(item, newQuantity); // Call parent function with updated quantity
     }
   };
 
@@ -21,6 +23,9 @@ const ItemTile = ({ item, onAddToCart }) => {
       <img src={item.image} alt={item.name} style={imageStyle} />
       <p>{item.description}</p>
       <p>Rate: ${item.rate}</p>
+      <p>Stock: ${item.stock}</p>
+      <p>Brand: {item.brand}</p> {/* Display Brand */}
+      <p>Category: {item.category}</p> {/* Display Category */}
       <div>
         <button onClick={handleDecrement} style={buttonStyle}>-</button>
         <span style={quantityStyle}>{quantity}</span>

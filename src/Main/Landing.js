@@ -13,6 +13,8 @@ const Landing = () => {
   const [orders, setOrders] = useState([]);
   const [view, setView] = useState('main'); // New state for view management
   const [editOrderIndex, setEditOrderIndex] = useState(null);
+  const [selectedCategory, setSelectedCategory] = useState('');
+  const [selectedBrand, setSelectedBrand] = useState('');
 
   const items = [
     {
@@ -20,50 +22,73 @@ const Landing = () => {
       image: 'https://via.placeholder.com/150',
       description: 'This is a description for item 1.',
       rate: 10,
+      stock: 100,
+      brand: 'Brand A',
+      category: 'Category X',
     },
     {
       name: 'Item 2',
       image: 'https://via.placeholder.com/150',
       description: 'This is a description for item 2.',
       rate: 20,
+      stock: 200,
+      brand: 'Brand B',
+      category: 'Category Y',
     },
     {
       name: 'Item 3',
       image: 'https://via.placeholder.com/150',
-      description: 'This is a description for item 2.',
+      description: 'This is a description for item 3.',
       rate: 30,
+      stock: 300,
+      brand: 'Brand C',
+      category: 'Category Z',
     },
     {
       name: 'Item 4',
       image: 'https://via.placeholder.com/150',
       description: 'This is a description for item 2.',
       rate: 40,
+      stock: 400,
+      brand: 'Brand D',
+      category: 'Category Z',
     },
     {
       name: 'Item 5',
       image: 'https://via.placeholder.com/150',
       description: 'This is a description for item 2.',
       rate: 50,
+      stock: 100,
+      brand: 'Brand D',
+      category: 'Category X',
     },
     {
       name: 'Item 6',
       image: 'https://via.placeholder.com/150',
       description: 'This is a description for item 2.',
       rate: 60,
+      stock: 100,
+      brand: 'Brand D',
+      category: 'Category Y',
     },
     {
       name: 'Item 7',
       image: 'https://via.placeholder.com/150',
       description: 'This is a description for item 2.',
       rate: 70,
+      stock: 100,
+      brand: 'Brand D',
+      category: 'Category Z',
     },
     {
       name: 'Item 8',
       image: 'https://via.placeholder.com/150',
       description: 'This is a description for item 2.',
       rate: 80,
+      stock: 300,
+      brand: 'Brand D',
+      category: 'Category X',
     },
-    // Add more items as needed
   ];
 
   const customers = [
@@ -77,7 +102,6 @@ const Landing = () => {
       email: 'customer2@example.com',
       address: '456 Elm St',
     },
-    // Add more customers as needed
   ];
 
   const addToCart = (item, newQuantity) => {
@@ -127,7 +151,9 @@ const Landing = () => {
   };
 
   const handleSaveEdit = (editedOrder) => {
-    const updatedOrders = orders.map((order, index) => (index === editOrderIndex ? editedOrder : order));
+    const updatedOrders = orders.map((order, index) =>
+      index === editOrderIndex ? editedOrder : order
+    );
     setOrders(updatedOrders);
     setEditOrderIndex(null);
   };
@@ -135,6 +161,12 @@ const Landing = () => {
   const handleCancelEdit = () => {
     setEditOrderIndex(null);
   };
+
+  const filteredItems = items.filter(item => {
+    const matchCategory = selectedCategory ? item.category === selectedCategory : true;
+    const matchBrand = selectedBrand ? item.brand === selectedBrand : true;
+    return matchCategory && matchBrand;
+  });
 
   return (
     <div style={appStyle}>
@@ -156,8 +188,34 @@ const Landing = () => {
           <main style={mainStyle}>
             {view === 'main' ? (
               <>
+                <div style={{ marginBottom: '10px' }}>
+                  {/* Category filter dropdown */}
+                  <select
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                  >
+                    <option value="">All Categories</option>
+                    <option value="Category X">Category X</option>
+                    <option value="Category Y">Category Y</option>
+                    <option value="Category Z">Category Z</option>
+                  </select>
+
+                  {/* Brand filter dropdown */}
+                  <select
+                    value={selectedBrand}
+                    onChange={(e) => setSelectedBrand(e.target.value)}
+                    style={{ marginLeft: '10px' }}
+                  >
+                    <option value="">All Brands</option>
+                    <option value="Brand A">Brand A</option>
+                    <option value="Brand B">Brand B</option>
+                    <option value="Brand C">Brand C</option>
+                    <option value="Brand D">Brand D</option>
+                  </select>
+                </div>
+
                 <div style={itemsContainerStyle}>
-                  {items.map((item, index) => (
+                  {filteredItems.map((item, index) => (
                     <ItemTile key={index} item={item} onAddToCart={addToCart} />
                   ))}
                 </div>
@@ -171,7 +229,8 @@ const Landing = () => {
                         <ul>
                           {cart.map((cartItem, index) => (
                             <li key={index}>
-                              {cartItem.name} - {cartItem.quantity} x ${cartItem.rate} = ${cartItem.quantity * cartItem.rate}
+                              {cartItem.name} - {cartItem.quantity} x ${cartItem.rate} = $
+                              {cartItem.quantity * cartItem.rate}
                             </li>
                           ))}
                         </ul>
@@ -179,7 +238,10 @@ const Landing = () => {
                     )}
                     <button
                       onClick={openModal}
-                      style={{ ...buttonStyle, backgroundColor: cart.length > 0 ? '#28a745' : '#6c757d' }}
+                      style={{
+                        ...buttonStyle,
+                        backgroundColor: cart.length > 0 ? '#28a745' : '#6c757d',
+                      }}
                       disabled={cart.length === 0}
                     >
                       Checkout
