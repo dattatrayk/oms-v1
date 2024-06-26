@@ -2,19 +2,25 @@ import React, { useState } from 'react';
 import Header from './Common/Header';
 import Footer from './Common/Footer';
 import Landing from './Main/Landing';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const App = () => {
-  
+  const [activeView, setActiveView] = useState('main');
+
+  const handleViewChange = (view) => {
+    setActiveView(view);
+  };
 
   return (
     <div style={appStyle}>
-      <Header />
+      <Header onNavButtonClick={handleViewChange} />
       <main style={mainStyle}>
-        <Landing />
+        <Landing activeView={activeView} />
       </main>
       <br></br>
       <br></br>
       {/* <Footer /> */}
+      <ToastContainer />
     </div>
   );
 };
@@ -29,22 +35,6 @@ const mainStyle = {
   flex: '1',
   padding: '20px',
   textAlign: 'center',
-};
-
-const itemsContainerStyle = {
-  display: 'flex',
-  flexWrap: 'wrap',
-  justifyContent: 'center',
-};
-
-const cartStyle = {
-  marginTop: '20px',
-  textAlign: 'left',
-};
-
-const buttonStyle = {
-  marginTop: '10px',
-  padding: '5px 10px',
 };
 
 export default App;

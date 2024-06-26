@@ -16,16 +16,17 @@ const ItemTile = ({ item, onAddToCart }) => {
       onAddToCart(item, newQuantity); // Call parent function with updated quantity
     }
   };
-
+  
   return (
     <div style={itemTileStyle}>
       <h3>{item.name}</h3>
-      <img src={item.image} alt={item.name} style={imageStyle} />
+      <img src={item.imgURL} alt={item.name} style={imageStyle} />
       <p>{item.description}</p>
-      <p>Rate: ${item.rate}</p>
+  
+      <p>Rate: ${item.price}</p>
       <p>Stock: ${item.stock}</p>
-      <p>Brand: {item.brand}</p> {/* Display Brand */}
-      <p>Category: {item.category}</p> {/* Display Category */}
+      <p>Brand: {item.brandName}</p> {/* Display Brand */}
+      <p>Category: {item.categoryName}</p> {/* Display Category */}
       <div>
         <button onClick={handleDecrement} style={buttonStyle}>-</button>
         <span style={quantityStyle}>{quantity}</span>

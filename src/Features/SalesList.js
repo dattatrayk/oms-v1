@@ -1,6 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
-const SalesList = ({ orders, onEdit }) => {
+const SalesList = ({ onEdit }) => {
+  const [orders, setOrders] = useState([]);
+
+  useEffect(() => {
+    const fetchSalesData = async () => {
+      try {
+        const response = await axios.post('http://localhost:62083/api/Sale', {
+          ClientID: '9CB0F686-0336-4CDA-9B6E-3162CF5A2D25',
+        },
+        {
+          headers: {
+            'ApiKey': 'your-api-key', // Replace with your actual API key
+          },
+        });
+        if (response.data.status === 1) {
+          setOrders(response.data.data);
+        } else {
+          throw new Error(response.data.message || 'Failed to fetch sales data');
+        }
+      } catch (error) {
+        console.error('Error fetching sales data:', error);
+        // Handle error state if needed
+      }
+    };
+
+    fetchSalesData();
+  }, []); // Empty dependency array ensures the effect runs once on component mount
+
   return (
     <div style={salesListContainerStyle}>
       <h2>Sales List</h2>
@@ -9,20 +37,20 @@ const SalesList = ({ orders, onEdit }) => {
       ) : (
         <ul style={salesListStyle}>
           {orders.map((order, index) => (
-            <li key={index} style={salesItemStyle}>
-              <h3>Order {index + 1}</h3>
-              <p><strong>Customer Name:</strong> {order.customer.name}</p>
-              <p><strong>Email:</strong> {order.customer.email}</p>
-              <p><strong>Address:</strong> {order.customer.address}</p>
-              <h4>Items:</h4>
+            <li key={order.saleID} style={salesItemStyle}>
+              <h3>Order {order.saleID}</h3>
+              <p><strong>Customer Name:</strong> {order.customerName}</p>
+              <p><strong>Email:</strong> {order.email}</p>
+              <p><strong>Address:</strong> {order.address}</p>
+              {/* <h4>Items:</h4>
               <ul>
-                {order.items.map((item, itemIndex) => (
+                {order.saleDetail.map((item, itemIndex) => (
                   <li key={itemIndex}>
                     {item.name} - {item.quantity} x ${item.rate} = ${item.quantity * item.rate}
                   </li>
                 ))}
-              </ul>
-              <button onClick={() => onEdit(index)} style={editButtonStyle}>Edit</button>
+              </ul> */}
+              <button onClick={() => onEdit(order.saleID)} style={editButtonStyle}>Edit</button>
             </li>
           ))}
         </ul>
@@ -31,6 +59,7 @@ const SalesList = ({ orders, onEdit }) => {
   );
 };
 
+// Styles remain unchanged
 const salesListContainerStyle = {
   padding: '20px',
   textAlign: 'center',
@@ -59,4 +88,5 @@ const editButtonStyle = {
   borderRadius: '4px',
   cursor: 'pointer',
 };
+
 export default SalesList;
