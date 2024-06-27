@@ -12,7 +12,7 @@ const CustomerList = ({ customers }) => {
             <li key={index}>
               <p><strong>Name:</strong> {customer.name}</p>
               <p><strong>Email:</strong> {customer.email}</p>
-              <p><strong>Address:</strong> {customer.address}</p>
+              <p><strong>Address:</strong> {customer.addressDetails.address}</p>
             </li>
           ))}
         </ul>

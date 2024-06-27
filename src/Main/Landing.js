@@ -13,6 +13,7 @@ const CLIENT_ID = '9CB0F686-0336-4CDA-9B6E-3162CF5A2D25';
 const API_KEY = 'your-api-key'; // Replace with your actual API key
 
 const Landing = ({ activeView }) => {
+  // State
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [cart, setCart] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,7 +25,9 @@ const Landing = ({ activeView }) => {
   const [categories, setCategories] = useState([]);
   const [brands, setBrands] = useState([]);
   const [priceRange, setPriceRange] = useState([0, 1000]);
+  const [customers, setCustomers] = useState([]);
 
+  // Fetch Items
   useEffect(() => {
     const fetchItems = async () => {
       try {
@@ -57,6 +60,7 @@ const Landing = ({ activeView }) => {
     fetchItems();
   }, [selectedCategory, selectedBrand, priceRange]);
 
+  // Fetch Categories and Brands
   useEffect(() => {
     const fetchCategoriesAndBrands = async () => {
       try {
@@ -88,19 +92,35 @@ const Landing = ({ activeView }) => {
     fetchCategoriesAndBrands();
   }, []);
 
-  const customers = [
-    {
-      name: 'Customer 1',
-      email: 'customer1@example.com',
-      address: '123 Main St',
-    },
-    {
-      name: 'Customer 2',
-      email: 'customer2@example.com',
-      address: '456 Elm St',
-    },
-  ];
+  // Fetch Customers
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const response = await axios.post(
+          `${API_BASE_URL}/Customer`,
+          {
+            ClientID: CLIENT_ID,
+          },
+          {
+            headers: {
+              'ApiKey': API_KEY,
+            },
+          }
+        );
+        if (response.data.status === 1) {
+          setCustomers(response.data.data);
+        } else {
+          console.error('Failed to fetch customers:', response.data.message);
+        }
+      } catch (error) {
+        console.error('Error fetching customers:', error);
+      }
+    };
 
+    fetchCustomers();
+  }, []);
+
+  // Event Handlers
   const addToCart = (item, newQuantity) => {
     if (newQuantity > 0) {
       const updatedCart = cart.map(cartItem =>
@@ -147,6 +167,7 @@ const Landing = ({ activeView }) => {
     setEditOrderIndex(null);
   };
 
+  // Rendering Logic
   return (
     <div style={styles.container}>
       {!isAuthenticated ? (
@@ -248,7 +269,7 @@ const Landing = ({ activeView }) => {
                   customers={customers}
                 />
               ) : (
-                <SalesList orders={orders} onEdit={handleEdit} customers={customers} />
+                <SalesList orders={orders} items={items} onEdit={handleEdit} customers={customers} />
               )
             ) : (
               <CustomerList customers={customers} />
@@ -261,6 +282,7 @@ const Landing = ({ activeView }) => {
   );
 };
 
+// Styles
 const styles = {
   container: {
     display: 'flex',
