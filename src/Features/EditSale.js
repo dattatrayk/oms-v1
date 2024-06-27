@@ -64,13 +64,13 @@ const EditSale = ({ order, onSave, onCancel, items, customers }) => {
         <label>Customer:</label>
         <input
           type="text"
-          value={editedOrder.customer.name}
+          value={editedOrder.customerName}
           readOnly
           style={inputStyle}
         />
       </div>
       <h3>Items</h3>
-      {editedOrder.items.map((item, index) => (
+      {/* {editedOrder.items.map((item, index) => (
         <div key={index} style={itemGroupStyle}>
           <div style={formGroupStyle}>
             <label>Item Name:</label>
@@ -101,7 +101,7 @@ const EditSale = ({ order, onSave, onCancel, items, customers }) => {
           </div>
           <button onClick={() => handleRemoveItem(index)} style={removeButtonStyle}>Remove</button>
         </div>
-      ))}
+      ))} */}
       <div style={formGroupStyle}>
         <label>Add Item:</label>
         <select onChange={(e) => handleAddItem(availableItems.find(item => item.name === e.target.value))} style={inputStyle}>
@@ -165,16 +165,6 @@ const cancelButtonStyle = {
   marginTop: '10px',
   padding: '10px 20px',
   backgroundColor: '#6c757d',
-  color: 'white',
-  border: 'none',
-  borderRadius: '4px',
-  cursor: 'pointer',
-};
-
-const toggleButtonStyle = {
-  marginLeft: '10px',
-  padding: '10px 20px',
-  backgroundColor: '#007bff',
   color: 'white',
   border: 'none',
   borderRadius: '4px',

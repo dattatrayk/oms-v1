@@ -5,7 +5,7 @@ import ItemTile from '../Features/ItemTile';
 import Checkout from '../Features/Checkout';
 import Login from '../Account/Login';
 import SalesList from '../Features/SalesList';
-import EditSale from '../Features/EditSale';
+// import EditSale from '../Features/EditSale';
 import CustomerList from '../Features/CustomerList';
 
 const API_BASE_URL = process.env.REACT_APP_API; //'http://localhost:62083/api';
@@ -18,7 +18,7 @@ const Landing = ({ activeView }) => {
   const [cart, setCart] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [orders, setOrders] = useState([]);
-  const [editOrderIndex, setEditOrderIndex] = useState(null);
+  // const [editOrderIndex, setEditOrderIndex] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState(0);
   const [selectedBrand, setSelectedBrand] = useState(0);
   const [items, setItems] = useState([]);
@@ -151,21 +151,21 @@ const Landing = ({ activeView }) => {
     setIsModalOpen(false);
   };
 
-  const handleEdit = index => {
-    setEditOrderIndex(index);
-  };
+  // const handleEdit = index => {
+  //   setEditOrderIndex(index);
+  // };
 
-  const handleSaveEdit = editedOrder => {
-    const updatedOrders = orders.map((order, index) =>
-      index === editOrderIndex ? editedOrder : order
-    );
-    setOrders(updatedOrders);
-    setEditOrderIndex(null);
-  };
+  // const handleSaveEdit = editedOrder => {
+  //   const updatedOrders = orders.map((order, index) =>
+  //     index === editOrderIndex ? editedOrder : order
+  //   );
+  //   setOrders(updatedOrders);
+  //   setEditOrderIndex(null);
+  // };
 
-  const handleCancelEdit = () => {
-    setEditOrderIndex(null);
-  };
+  // const handleCancelEdit = () => {
+  //   setEditOrderIndex(null);
+  // };
 
   // Rendering Logic
   return (
@@ -260,20 +260,23 @@ const Landing = ({ activeView }) => {
                 </div>
               </>
             ) : activeView === 'sales' ? (
-              editOrderIndex !== null ? (
-                <EditSale
-                  order={orders[editOrderIndex]}
-                  onSave={handleSaveEdit}
-                  onCancel={handleCancelEdit}
-                  items={items}
-                  customers={customers}
-                />
-              ) : (
-                <SalesList orders={orders} items={items} onEdit={handleEdit} customers={customers} />
-              )
+              // onEdit={handleEdit}
+                <SalesList orders={orders} items={items}  customers={customers} />
+                // editOrderIndex !== null ? (
+                //   <EditSale
+                //     order={orders[editOrderIndex]}
+                //     onSave={handleSaveEdit}
+                //     onCancel={handleCancelEdit}
+                //     items={items}
+                //     customers={customers}
+                //   />
+                // ) : (
+                //   <SalesList orders={orders} items={items} onEdit={handleEdit} customers={customers} />
+                // )
             ) : (
               <CustomerList customers={customers} />
-            )}
+            )
+            }
           </main>
           <Checkout isOpen={isModalOpen} onClose={closeModal} cart={cart} onCheckout={handleCheckout} />
         </>
