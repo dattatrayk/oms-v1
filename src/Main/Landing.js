@@ -8,7 +8,7 @@ import SalesList from '../Features/SalesList';
 import EditSale from '../Features/EditSale';
 import CustomerList from '../Features/CustomerList';
 
-const API_BASE_URL = 'http://localhost:62083/api';
+const API_BASE_URL = process.env.REACT_APP_API; //'http://localhost:62083/api';
 const CLIENT_ID = '9CB0F686-0336-4CDA-9B6E-3162CF5A2D25';
 const API_KEY = 'your-api-key'; // Replace with your actual API key
 

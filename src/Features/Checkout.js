@@ -35,7 +35,7 @@ const Checkout = ({ isOpen, onClose, cart, onCheckout }) => {
   const fetchAutocompleteOptions = async (searchText) => {
     try {
       const response = await axios.post(
-        'http://localhost:62083/api/Customer',
+        `${process.env.REACT_APP_API}/Customer`,
         {
           ClientID: '9CB0F686-0336-4CDA-9B6E-3162CF5A2D25',
           SearchText: searchText,
@@ -60,7 +60,7 @@ const Checkout = ({ isOpen, onClose, cart, onCheckout }) => {
   const handleAutocompleteSelect = async (customerId, customerName) => {
     try {
       const response = await axios.get(
-        `http://localhost:62083/api/Customer/GetByID?customerID=${customerId}`,
+        `${process.env.REACT_APP_API}/Customer/GetByID?customerID=${customerId}`,
         {
           headers: {
             'ApiKey': 'your-api-key', // Replace with your actual API key
@@ -111,7 +111,7 @@ const Checkout = ({ isOpen, onClose, cart, onCheckout }) => {
 
       // Call API to create sale
       const response = await axios.post(
-        'http://localhost:62083/api/Sale/Create',
+        `${process.env.REACT_APP_API}/Sale/Create`,
         payload,
         {
           headers: {

@@ -7,7 +7,7 @@ const SalesList = ({ onEdit }) => {
   useEffect(() => {
     const fetchSalesData = async () => {
       try {
-        const response = await axios.post('http://localhost:62083/api/Sale', {
+        const response = await axios.post(`${process.env.REACT_APP_API}/Sale`, {
           ClientID: '9CB0F686-0336-4CDA-9B6E-3162CF5A2D25',
         },
         {
