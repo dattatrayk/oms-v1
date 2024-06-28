@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import EditSale from './EditSale';
+import { toast } from 'react-toastify';
 
 const SalesList = () => {
   const [orders, setOrders] = useState([]);
@@ -33,19 +34,73 @@ const SalesList = () => {
     fetchSalesData();
   }, []); // Empty dependency array ensures the effect runs once on component mount
 
-  const handleEdit = (orderID) => {
-    debugger
-    const orderToEdit = orders.find(order => order.saleID === orderID);
-    setEditingOrder(orderToEdit);
+  const handleEdit = async (saleID) => {
+    try {
+      const url = `${process.env.REACT_APP_API}/Sale/GetByID?saleID=${saleID}`;
+      console.log(`Fetching sale details from: ${url}`); // Log the URL to verify
+      const response = await axios.get(url, {
+        headers: {
+          'ApiKey': 'your-api-key', // Replace with your actual API key
+        },
+      });
+      if (response.data.status === 1) {
+        setEditingOrder(response.data.data);
+      } else {
+        throw new Error(response.data.message || 'Failed to fetch order details');
+      }
+    } catch (error) {
+      console.error('Error fetching order details:', error);
+      // Handle error state if needed
+    }
   };
 
-  const handleSave = (updatedOrder) => {
-    // Save the updated order
-    const updatedOrders = orders.map(order =>
-      order.saleID === updatedOrder.saleID ? updatedOrder : order
-    );
-    setOrders(updatedOrders);
-    setEditingOrder(null);
+  const handleSave = async  (updatedOrder) => {
+    try {
+      const saleDetails = updatedOrder.saleDetail.map((item) => ({
+        ItemID: item.itemID, // Replace with actual item ID from your data
+        Price: item.price,
+        Quantity: item.quantity,
+        ItemName: item.itemName        ,
+      }));
+
+      // Prepare payload for API request
+      const payload = {
+        ClientID: '9CB0F686-0336-4CDA-9B6E-3162CF5A2D25',
+        SaleID: updatedOrder.saleID, // Pass selected sale ID
+        SaleDate: updatedOrder.saleDate, // Example: current date and time
+        CustomerName: updatedOrder.customerName,
+        ContactNo: updatedOrder.contactNo, // Adding contact number
+        Email: updatedOrder.email,
+        Address: updatedOrder.address,
+        TotalAmount: updatedOrder.totalAmount,
+        Quantity: updatedOrder.quantity,
+        ModifiedBy: '9CB0F686-0336-4CDA-9B6E-3162CF5A2D25',
+        SaleDetail: saleDetails,
+      };
+
+      // Call API to create sale
+      const response = await axios.post(
+        `${process.env.REACT_APP_API}/Sale/Update`,
+        payload,
+        {
+          headers: {
+            'ApiKey': 'your-api-key', // Replace with your actual API key
+          },
+        }
+      );
+      // Check the response status
+      if (response.data.status === 1) {
+        toast.success('Order updated successfully');
+        //setOrders(updatedOrder);
+        setEditingOrder(null);
+      } else {
+        toast.error('Failed to place order');
+      }
+
+    } catch (error) {
+      console.error('Error saving order details:', error);
+      // Handle error state if needed
+    }
   };
 
   const handleCancel = () => {

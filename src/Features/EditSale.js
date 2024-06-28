@@ -22,24 +22,24 @@ const EditSale = ({ order, onSave, onCancel, items, customers }) => {
   };
 
   const handleItemChange = (index, field, value) => {
-    const newItems = editedOrder.items.map((item, i) =>
+    const newItems = editedOrder.saleDetail.map((item, i) =>
       i === index ? { ...item, [field]: value } : item
     );
-    setEditedOrder({ ...editedOrder, items: newItems });
+    setEditedOrder({ ...editedOrder, saleDetail: newItems });
   };
 
   const handleAddItem = (item) => {
     setEditedOrder({
       ...editedOrder,
       items: [
-        ...editedOrder.items,
+        ...editedOrder.saleDetail,
         { ...item, quantity: 1 }
       ]
     });
   };
 
   const handleRemoveItem = (index) => {
-    const newItems = editedOrder.items.filter((item, i) => i !== index);
+    const newItems = editedOrder.saleDetail.filter((item, i) => i !== index);
     setEditedOrder({ ...editedOrder, items: newItems });
   };
 
@@ -54,7 +54,7 @@ const EditSale = ({ order, onSave, onCancel, items, customers }) => {
 
   // Filter items to exclude existing items in the order
   const availableItems = items.filter(item => 
-    !editedOrder.items.some(orderItem => orderItem.name === item.name)
+    !editedOrder.saleDetail.some(orderItem => orderItem.itemName === item.itemName)
   );
 
   return (
@@ -70,13 +70,13 @@ const EditSale = ({ order, onSave, onCancel, items, customers }) => {
         />
       </div>
       <h3>Items</h3>
-      {/* {editedOrder.items.map((item, index) => (
+      {editedOrder.saleDetail.map((item, index) => (
         <div key={index} style={itemGroupStyle}>
           <div style={formGroupStyle}>
             <label>Item Name:</label>
             <input
               type="text"
-              value={item.name}
+              value={item.itemName}
               readOnly
               style={inputStyle}
             />
@@ -94,20 +94,20 @@ const EditSale = ({ order, onSave, onCancel, items, customers }) => {
             <label>Rate:</label>
             <input
               type="number"
-              value={item.rate}
+              value={item.price}
               readOnly
               style={inputStyle}
             />
           </div>
           <button onClick={() => handleRemoveItem(index)} style={removeButtonStyle}>Remove</button>
         </div>
-      ))} */}
+      ))}
       <div style={formGroupStyle}>
         <label>Add Item:</label>
-        <select onChange={(e) => handleAddItem(availableItems.find(item => item.name === e.target.value))} style={inputStyle}>
+        <select onChange={(e) => handleAddItem(availableItems.find(item => item.itemName === e.target.value))} style={inputStyle}>
           <option value="">Select an item</option>
           {availableItems.map((item, index) => (
-            <option key={index} value={item.name}>{item.name}</option>
+            <option key={index} value={item.itemName}>{item.itemName}</option>
           ))}
         </select>
       </div>
